@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>نمایش سیگنال‌ها</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      direction: rtl;
+      padding: 20px;
+      color: #333;
+    }
+    #signal-box {
+      white-space: pre-wrap;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: monospace;
+    }
+    .refresh-time {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>نمایش لحظه‌ای سیگنال‌ها</h2>
+  <div id="signal-box">در حال بارگذاری...</div>
+  <div class="refresh-time" id="refresh-time">آخرین به‌روزرسانی: -</div>
+
+  <script>
+    const url = "https://raw.githubusercontent.com/Hh243/bainry.hh/main/signals.txt";
+    const box = document.getElementById("signal-box");
+    const refreshLabel = document.getElementById("refresh-time");
+
+    async function loadSignals() {
+      try {
+        const res = await fetch(url + '?t=' + new Date().getTime()); // جلوگیری از کش
+        const text = await res.text();
+        box.textContent = text;
+        const now = new Date().toLocaleTimeString('fa-IR');
+        refreshLabel.textContent = "آخرین به‌روزرسانی: " + now;
+      } catch (e) {
+        box.textContent = "خطا در بارگذاری فایل.";
+        refreshLabel.textContent = "-";
+      }
+    }
+
+    loadSignals(); // بارگذاری اولیه
+    setInterval(loadSignals, 120000); // هر ۲ دقیقه
+  </script>
+
+</body>
+</html>
