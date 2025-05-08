@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>نمایش زنده سیگنال‌ها</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      direction: rtl;
+      padding: 20px;
+      background: #f7f7f7;
+      color: #333;
+    }
+    pre {
+      background: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      white-space: pre-wrap;
+      direction: rtl;
+    }
+  </style>
+</head>
+<body>
+  <h2>آخرین سیگنال‌ها</h2>
+  <pre id="log">در حال بارگذاری...</pre>
+
+  <script>
+    async function fetchLog() {
+      try {
+        const res = await fetch('./signals.txt?' + new Date().getTime());
+        const text = await res.text();
+        document.getElementById('log').textContent = text;
+      } catch (e) {
+        document.getElementById('log').textContent = "خطا در بارگذاری سیگنال‌ها";
+      }
+    }
+
+    fetchLog();
+    setInterval(fetchLog, 2 * 60 * 1000);
+  </script>
+</body>
+</html>
